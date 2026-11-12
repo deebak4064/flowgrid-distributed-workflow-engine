@@ -1,0 +1,70 @@
+
+ RUN  v5.1.0 /home/claude/flowgrid/backend
+
+ ✓ test/recovery.test.ts > worker failures > recovers a task from a crashed worker: heartbeat expiry -> DEAD -> lease reaped -> re-run elsewhere 3444ms
+ ✓ test/recovery.test.ts > worker failures > hands in-flight work back immediately on graceful shutdown 3627ms
+ ✓ test/recovery.test.ts > worker failures > re-delivers un-acked messages from a consumer that died before claiming (XAUTOCLAIM) 1174ms
+ ✓ test/recovery.test.ts > scheduler and queue failures > scheduler restart after Redis lost its stream: QUEUED tasks are re-published, nothing is lost 2119ms
+ ✓ test/recovery.test.ts > scheduler and queue failures > publishes tasks that were committed as QUEUED but never reached Redis (crash between commit and XADD) 1693ms
+ ✓ test/recovery.test.ts > scheduler and queue failures > survives Redis connection loss mid-run (all client connections killed) 1471ms
+ ✓ test/recovery.test.ts > scheduler and queue failures > survives Postgres connection loss mid-run (backends terminated) 1007ms
+ ✓ test/recovery.test.ts > worker registration & heartbeats > registers workers with their concurrency and records heartbeats 1011ms
+ ✓ test/recovery.test.ts > worker registration & heartbeats > an operator can drain a worker: it stops taking new tasks 2196ms
+ ✓ test/engine.test.ts > DAG execution > runs tasks in dependency order and executes independent branches in parallel 1497ms
+ ✓ test/engine.test.ts > DAG execution > follows only the branch whose condition holds and joins with ANY_SUCCESS 207ms
+ ✓ test/engine.test.ts > DAG execution > passes upstream outputs to downstream tasks (claims workflow end to end) 507ms
+ ✓ test/engine.test.ts > scheduling strategies > PRIORITY dispatches the highest effective priority first 197ms
+ ✓ test/engine.test.ts > scheduling strategies > FIFO dispatches in readiness order regardless of priority 268ms
+ ✓ test/engine.test.ts > scheduling strategies > EDF dispatches the earliest deadline first 274ms
+ ✓ test/engine.test.ts > scheduling strategies > aging raises the effective priority of waiting tasks (anti-starvation) 224ms
+ ✓ test/engine.test.ts > scheduling strategies > dispatch is event-driven: runnable tasks are dispatched without waiting for the poll interval 5590ms
+ ✓ test/engine.test.ts > scheduling strategies > backpressure: never dispatches more than capacity x queueFactor 132ms
+ ✓ test/engine.test.ts > retries, dead letters and workflow retry > retries transient failures with exponential backoff, then succeeds 726ms
+ ✓ test/engine.test.ts > retries, dead letters and workflow retry > dead-letters exhausted tasks, fails the workflow fast, and resumes from the failure point 293ms
+ ✓ test/engine.test.ts > retries, dead letters and workflow retry > sends non-retryable failures straight to the dead-letter table 164ms
+ ✓ test/engine.test.ts > retries, dead letters and workflow retry > times out a hung task and records TIMED_OUT 501ms
+ ✓ test/engine.test.ts > delivery guarantees > idempotent processing: a crash after the side effect never duplicates the business record 227ms
+ ✓ test/engine.test.ts > delivery guarantees > drops duplicate stream deliveries via the ownership check 371ms
+ ✓ test/engine.test.ts > delivery guarantees > parks poison messages in the DLQ stream instead of redelivering them forever 78ms
+ ✓ test/engine.test.ts > delivery guarantees > an idempotency key returns the same execution, even under concurrent submits 144ms
+ ✓ test/engine.test.ts > delivery guarantees > fan-in under concurrent completions finalizes each workflow exactly once 985ms
+ ✓ test/engine.test.ts > lifecycle > cancels a running execution and fences the in-flight result 449ms
+ ✓ test/engine.test.ts > lifecycle > keeps in-flight executions on their pinned workflow version 1690ms
+ ✓ test/engine.test.ts > lifecycle > delays an execution until runAt and supports rescheduling 1186ms
+ ✓ test/engine.test.ts > lifecycle > fires a recurring schedule exactly once per slot, even with two schedulers racing 123ms
+ ✓ test/processes.test.ts > multiple independent worker processes > execute tasks in parallel across processes and survive kill -9 of one of them 5336ms
+ ✓ test/api.test.ts > authentication > rejects bad credentials with a uniform error and audits the attempt 81ms
+ ✓ test/api.test.ts > authentication > requires a valid, untampered bearer token 2ms
+ ✓ test/api.test.ts > role-based permissions > only ADMIN can create workflows 17ms
+ ✓ test/api.test.ts > role-based permissions > VIEWER cannot execute; OPERATOR can, idempotently 16ms
+ ✓ test/api.test.ts > role-based permissions > organization isolation: another tenant can neither see nor run this tenant's resources 14ms
+ ✓ test/api.test.ts > role-based permissions > records an audit trail of mutating actions 1ms
+ ✓ test/api.test.ts > validation and errors > rejects cyclic workflows with the cycle in the error 2ms
+ ✓ test/api.test.ts > validation and errors > returns RFC 7807 problems for malformed input 1ms
+ ✓ test/api.test.ts > validation and errors > paginates and filters 3ms
+ ✓ test/api.test.ts > validation and errors > serves OpenAPI documentation 7ms
+ ✓ test/api.test.ts > rate limiting > limits login attempts per client IP 126ms
+ ✓ test/dag.test.ts > DAG cycle detection > rejects a simple cycle and reports the concrete path 2ms
+ ✓ test/dag.test.ts > DAG cycle detection > rejects self-dependencies and graphs without a root 1ms
+ ✓ test/dag.test.ts > DAG cycle detection > rejects unknown nodes, duplicate keys/edges and unknown task types 1ms
+ ✓ test/dag.test.ts > DAG cycle detection > validates policy bounds 1ms
+ ✓ test/dag.test.ts > dependency resolution / topological scheduling > orders a diamond and groups independent tasks into parallel levels 4ms
+ ✓ test/dag.test.ts > dependency resolution / topological scheduling > handles a 200-node chain in linear time 1ms
+ ✓ test/dag.test.ts > edge conditions (branching) > { path: 'route', op: 'EQ', …(1) } -> true 0ms
+ ✓ test/dag.test.ts > edge conditions (branching) > { path: 'route', op: 'neq', …(1) } -> true 0ms
+ ✓ test/dag.test.ts > edge conditions (branching) > { path: 'score', op: 'gt', value: 40 } -> true 0ms
+ ✓ test/dag.test.ts > edge conditions (branching) > { path: 'score', op: 'lte', value: 41 } -> false 0ms
+ ✓ test/dag.test.ts > edge conditions (branching) > { path: 'score', op: 'gt', value: '40' } -> false 0ms
+ ✓ test/dag.test.ts > edge conditions (branching) > { path: 'route', op: 'in', …(1) } -> true 0ms
+ ✓ test/dag.test.ts > edge conditions (branching) > { path: 'nested.ok', op: 'truthy' } -> true 0ms
+ ✓ test/dag.test.ts > edge conditions (branching) > { path: 'missing', op: 'exists' } -> false 0ms
+ ✓ test/dag.test.ts > edge conditions (branching) > { path: 'route', op: 'bogus' } -> false 0ms
+ ✓ test/dag.test.ts > edge conditions (branching) > treats a missing condition as always taken 0ms
+ ✓ test/dag.test.ts > retry backoff > is exponential with equal jitter and capped 2ms
+
+ Test Files  5 passed (5)
+      Tests  60 passed (60)
+   Start at  00:08:48
+   Duration  41.04s (tests 98%, import 1%)
+
+JSON report written to /home/claude/flowgrid/benchmarks/test_results.json

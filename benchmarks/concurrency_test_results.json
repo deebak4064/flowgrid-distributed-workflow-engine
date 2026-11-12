@@ -1,0 +1,389 @@
+{
+  "generatedAt": "2026-11-12T18:38:00.660Z",
+  "environment": {
+    "cpuModel": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "logicalCpus": 2,
+    "memoryGb": 7.8,
+    "os": "Linux 6.18.44-fc-v378 (x64)",
+    "node": "v22.23.4",
+    "postgres": "psql (PostgreSQL) 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)",
+    "redis": "v=7.0.15",
+    "topology": "everything on one machine: Postgres, Redis, scheduler process, worker processes and the load generator share the same CPUs",
+    "postgresConfig": "shared_buffers=512MB, synchronous_commit=on, fsync=on (defaults otherwise)",
+    "redisConfig": "appendonly yes (everysec)"
+  },
+  "summary": {
+    "testsRun": 60,
+    "testsPassed": 60,
+    "testsFailed": 0,
+    "concurrencyAndFailureTests": 18,
+    "concurrencyAndFailureTestsPassed": 18
+  },
+  "tests": [
+    {
+      "file": "test/dag.test.ts",
+      "name": "DAG cycle detection rejects unknown nodes, duplicate keys/edges and unknown task types",
+      "status": "passed",
+      "durationMs": 1
+    },
+    {
+      "file": "test/dag.test.ts",
+      "name": "dependency resolution / topological scheduling orders a diamond and groups independent tasks into parallel levels",
+      "status": "passed",
+      "durationMs": 4
+    },
+    {
+      "file": "test/engine.test.ts",
+      "name": "DAG execution runs tasks in dependency order and executes independent branches in parallel",
+      "status": "passed",
+      "durationMs": 1497
+    },
+    {
+      "file": "test/engine.test.ts",
+      "name": "delivery guarantees idempotent processing: a crash after the side effect never duplicates the business record",
+      "status": "passed",
+      "durationMs": 227
+    },
+    {
+      "file": "test/engine.test.ts",
+      "name": "delivery guarantees drops duplicate stream deliveries via the ownership check",
+      "status": "passed",
+      "durationMs": 371
+    },
+    {
+      "file": "test/engine.test.ts",
+      "name": "delivery guarantees an idempotency key returns the same execution, even under concurrent submits",
+      "status": "passed",
+      "durationMs": 144
+    },
+    {
+      "file": "test/engine.test.ts",
+      "name": "delivery guarantees fan-in under concurrent completions finalizes each workflow exactly once",
+      "status": "passed",
+      "durationMs": 985
+    },
+    {
+      "file": "test/engine.test.ts",
+      "name": "lifecycle fires a recurring schedule exactly once per slot, even with two schedulers racing",
+      "status": "passed",
+      "durationMs": 123
+    },
+    {
+      "file": "test/processes.test.ts",
+      "name": "multiple independent worker processes execute tasks in parallel across processes and survive kill -9 of one of them",
+      "status": "passed",
+      "durationMs": 5336
+    },
+    {
+      "file": "test/recovery.test.ts",
+      "name": "worker failures recovers a task from a crashed worker: heartbeat expiry -> DEAD -> lease reaped -> re-run elsewhere",
+      "status": "passed",
+      "durationMs": 3444
+    },
+    {
+      "file": "test/recovery.test.ts",
+      "name": "worker failures hands in-flight work back immediately on graceful shutdown",
+      "status": "passed",
+      "durationMs": 3627
+    },
+    {
+      "file": "test/recovery.test.ts",
+      "name": "worker failures re-delivers un-acked messages from a consumer that died before claiming (XAUTOCLAIM)",
+      "status": "passed",
+      "durationMs": 1174
+    },
+    {
+      "file": "test/recovery.test.ts",
+      "name": "scheduler and queue failures scheduler restart after Redis lost its stream: QUEUED tasks are re-published, nothing is lost",
+      "status": "passed",
+      "durationMs": 2119
+    },
+    {
+      "file": "test/recovery.test.ts",
+      "name": "scheduler and queue failures publishes tasks that were committed as QUEUED but never reached Redis (crash between commit and XADD)",
+      "status": "passed",
+      "durationMs": 1693
+    },
+    {
+      "file": "test/recovery.test.ts",
+      "name": "scheduler and queue failures survives Redis connection loss mid-run (all client connections killed)",
+      "status": "passed",
+      "durationMs": 1471
+    },
+    {
+      "file": "test/recovery.test.ts",
+      "name": "scheduler and queue failures survives Postgres connection loss mid-run (backends terminated)",
+      "status": "passed",
+      "durationMs": 1007
+    },
+    {
+      "file": "test/recovery.test.ts",
+      "name": "worker registration & heartbeats registers workers with their concurrency and records heartbeats",
+      "status": "passed",
+      "durationMs": 1011
+    },
+    {
+      "file": "test/recovery.test.ts",
+      "name": "worker registration & heartbeats an operator can drain a worker: it stops taking new tasks",
+      "status": "passed",
+      "durationMs": 2196
+    }
+  ],
+  "loadTestParallelism": [
+    {
+      "scenario": "scale-1k",
+      "workers": 4,
+      "slotsPerWorker": 32,
+      "totalSlots": 128,
+      "peakParallelTasks": 104,
+      "tasksPerWorker": {
+        "bench-w0": 238,
+        "bench-w1": 244,
+        "bench-w2": 232,
+        "bench-w3": 286
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "scale-10k",
+      "workers": 4,
+      "slotsPerWorker": 32,
+      "totalSlots": 128,
+      "peakParallelTasks": 128,
+      "tasksPerWorker": {
+        "bench-w0": 2460,
+        "bench-w1": 2614,
+        "bench-w2": 2534,
+        "bench-w3": 2392
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "scale-50k",
+      "workers": 4,
+      "slotsPerWorker": 32,
+      "totalSlots": 128,
+      "peakParallelTasks": 109,
+      "tasksPerWorker": {
+        "bench-w0": 12714,
+        "bench-w1": 12181,
+        "bench-w2": 12409,
+        "bench-w3": 12696
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "workers-1",
+      "workers": 1,
+      "slotsPerWorker": 16,
+      "totalSlots": 16,
+      "peakParallelTasks": 16,
+      "tasksPerWorker": {
+        "bench-w0": 10000
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "workers-2",
+      "workers": 2,
+      "slotsPerWorker": 16,
+      "totalSlots": 32,
+      "peakParallelTasks": 32,
+      "tasksPerWorker": {
+        "bench-w0": 5017,
+        "bench-w1": 4983
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "workers-4",
+      "workers": 4,
+      "slotsPerWorker": 16,
+      "totalSlots": 64,
+      "peakParallelTasks": 64,
+      "tasksPerWorker": {
+        "bench-w0": 2502,
+        "bench-w1": 2486,
+        "bench-w2": 2585,
+        "bench-w3": 2427
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "conc-4",
+      "workers": 2,
+      "slotsPerWorker": 4,
+      "totalSlots": 8,
+      "peakParallelTasks": 8,
+      "tasksPerWorker": {
+        "bench-w0": 2498,
+        "bench-w1": 2502
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "conc-16",
+      "workers": 2,
+      "slotsPerWorker": 16,
+      "totalSlots": 32,
+      "peakParallelTasks": 32,
+      "tasksPerWorker": {
+        "bench-w0": 5058,
+        "bench-w1": 4942
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "conc-64",
+      "workers": 2,
+      "slotsPerWorker": 64,
+      "totalSlots": 128,
+      "peakParallelTasks": 128,
+      "tasksPerWorker": {
+        "bench-w0": 5286,
+        "bench-w1": 4714
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "dur-0",
+      "workers": 4,
+      "slotsPerWorker": 32,
+      "totalSlots": 128,
+      "peakParallelTasks": 128,
+      "tasksPerWorker": {
+        "bench-w0": 2490,
+        "bench-w1": 2609,
+        "bench-w2": 2483,
+        "bench-w3": 2418
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "dur-10",
+      "workers": 4,
+      "slotsPerWorker": 32,
+      "totalSlots": 128,
+      "peakParallelTasks": 128,
+      "tasksPerWorker": {
+        "bench-w0": 2456,
+        "bench-w1": 2527,
+        "bench-w2": 2647,
+        "bench-w3": 2370
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "dur-100",
+      "workers": 4,
+      "slotsPerWorker": 32,
+      "totalSlots": 128,
+      "peakParallelTasks": 128,
+      "tasksPerWorker": {
+        "bench-w0": 2594,
+        "bench-w1": 2397,
+        "bench-w2": 2512,
+        "bench-w3": 2497
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "strategy-fifo",
+      "workers": 1,
+      "slotsPerWorker": 8,
+      "totalSlots": 8,
+      "peakParallelTasks": 8,
+      "tasksPerWorker": {
+        "bench-w0": 3000
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "strategy-priority",
+      "workers": 1,
+      "slotsPerWorker": 8,
+      "totalSlots": 8,
+      "peakParallelTasks": 8,
+      "tasksPerWorker": {
+        "bench-w0": 3000
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "strategy-edf",
+      "workers": 1,
+      "slotsPerWorker": 8,
+      "totalSlots": 8,
+      "peakParallelTasks": 8,
+      "tasksPerWorker": {
+        "bench-w0": 3000
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "latency-light",
+      "workers": 2,
+      "slotsPerWorker": 16,
+      "totalSlots": 32,
+      "peakParallelTasks": 9,
+      "tasksPerWorker": {
+        "bench-w0": 1059,
+        "bench-w1": 941
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    },
+    {
+      "scenario": "failure-recovery",
+      "workers": 4,
+      "slotsPerWorker": 16,
+      "totalSlots": 64,
+      "peakParallelTasks": 61,
+      "tasksPerWorker": {
+        "bench-w0": 1074,
+        "bench-w1": 3030,
+        "bench-w2": 2957,
+        "bench-w3": 2939
+      },
+      "tasksSucceededMoreThanOnce": 0,
+      "workflowsFinalizedOtherThanOnce": 0
+    }
+  ],
+  "failureInjection": {
+    "failures": {
+      "failedAttempts": 1087,
+      "lostAttempts": 11,
+      "tasksRetried": 988,
+      "retrySuccessRate": 100,
+      "deadLettered": 0
+    },
+    "businessEffects": {
+      "notificationRows": 10000,
+      "distinctLogicalOperations": 10000,
+      "duplicateRows": 0,
+      "duplicateBusinessEffectRate": 0,
+      "handlerAttempts": 11098
+    },
+    "recovery": {
+      "killedAt": "2026-11-12T18:37:40.810Z",
+      "orphanedAttempts": 11,
+      "detectionAndReapMs": 3423,
+      "allOrphanedTasksCompletedMs": 3844
+    }
+  }
+}

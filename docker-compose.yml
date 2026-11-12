@@ -1,0 +1,93 @@
+# FlowGrid: one backend image, three roles as separate processes (failure isolation + independent scaling).
+#   cp .env.example .env   # then set real secrets
+#   docker compose up -d --build
+#   docker compose up -d --scale worker=6 --scale scheduler=2     # schedulers run active-active
+name: flowgrid
+
+x-backend: &backend
+  image: flowgrid/backend:local
+  build: ./backend
+  restart: unless-stopped
+  depends_on:
+    postgres: { condition: service_healthy }
+    redis: { condition: service_healthy }
+  environment: &env
+    FLOWGRID_DB_URL: postgres://flowgrid:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/flowgrid
+    FLOWGRID_REDIS_URL: redis://redis:6379
+    FLOWGRID_JWT_SECRET: ${FLOWGRID_JWT_SECRET:?set FLOWGRID_JWT_SECRET in .env}
+    FLOWGRID_DEMO_ENABLED: ${FLOWGRID_DEMO_ENABLED:-true}
+    FLOWGRID_DEMO_PASSWORD: ${FLOWGRID_DEMO_PASSWORD:-flowgrid-demo}
+    FLOWGRID_METRICS_PORT: "9100"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: flowgrid
+      POSTGRES_USER: flowgrid
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    command: ["postgres", "-c", "max_connections=300", "-c", "shared_buffers=256MB"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flowgrid -d flowgrid"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
+    volumes: [redisdata:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    <<: *backend
+    environment: { <<: *env, FLOWGRID_ROLE: api }
+    expose: ["8080"]   # reached through the frontend's nginx at /api; Prometheus scrapes /metrics on the internal network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  scheduler:
+    <<: *backend
+    environment: { <<: *env, FLOWGRID_ROLE: scheduler }
+    depends_on:
+      api: { condition: service_healthy }   # the API seeds demo data; migrations are safe from any role (advisory lock)
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:9100/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  worker:
+    <<: *backend
+    environment: { <<: *env, FLOWGRID_ROLE: worker, FLOWGRID_WORKER_CONCURRENCY: "16" }
+    depends_on:
+      api: { condition: service_healthy }
+    deploy:
+      replicas: 3
+    stop_grace_period: 30s   # SIGTERM drains: in-flight tasks get 20 s to finish, then are handed back
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:9100/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      api: { condition: service_healthy }
+    ports: ["8088:80"]
+
+volumes:
+  pgdata:
+  redisdata:

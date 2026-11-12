@@ -1,0 +1,97 @@
+@import "tailwindcss";
+@import "@fontsource-variable/instrument-sans";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+
+/*
+ * FlowGrid control plane tokens.
+ * Charcoal ground, slate surfaces. Violet = controls and selection. Electric cyan = live execution, and it is the
+ * only colour that ever moves. Green / amber / red are reserved for state; nothing decorative uses them.
+ */
+@theme {
+  --color-ground: #13161d;
+  --color-surface: #1a1f29;
+  --color-raised: #232937;
+  --color-hover: #2a3141;
+  --color-line: #2d3443;
+  --color-line-soft: #222834;
+  --color-ink: #e8ebf2;
+  --color-ink-2: #a3acbd;
+  --color-ink-3: #6c7588;
+  --color-violet: #9a8bff;
+  --color-violet-deep: #6b5be0;
+  --color-cyan: #2bddf2;
+  --color-ok: #4cc38a;
+  --color-warn: #e7a93c;
+  --color-bad: #f06a6a;
+  --color-queued: #8c9bff;
+
+  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+}
+
+html, body, #root { height: 100%; }
+body {
+  background: var(--color-ground);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-stretch: 92%; }
+
+.tnum { font-variant-numeric: tabular-nums; }
+
+:focus-visible { outline: 2px solid var(--color-violet); outline-offset: 2px; border-radius: 4px; }
+::selection { background: color-mix(in oklab, var(--color-violet) 40%, transparent); }
+
+/* Canvas grid for DAG views: the "grid" in FlowGrid, drawn once, quietly. */
+.grid-paper {
+  background-color: #11141a;
+  background-image:
+    radial-gradient(circle at 1px 1px, #2a3140 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* ---------------------------------------------------------------- the one moving thing: work in flight */
+
+/* Particles travel along a connector (pipeline hero, top-bar pulse). --d = duration, --delay set per particle. */
+@keyframes fg-travel { from { offset-distance: 0%; opacity: 0 } 12% { opacity: 1 } 88% { opacity: 1 } to { offset-distance: 100%; opacity: 0 } }
+.fg-particle {
+  position: absolute; left: 0; top: 0; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 9999px;
+  background: var(--color-cyan); box-shadow: 0 0 8px 1px color-mix(in oklab, var(--color-cyan) 70%, transparent);
+  animation: fg-travel var(--d, 1.6s) linear infinite; animation-delay: var(--delay, 0s);
+}
+
+/* DAG edges whose target is executing: dashes flow toward it. */
+@keyframes fg-flow { to { stroke-dashoffset: -24; } }
+.fg-edge-live path.react-flow__edge-path { stroke-dasharray: 5 7; animation: fg-flow 0.8s linear infinite; }
+
+@keyframes fg-pulse { 0%, 100% { opacity: 1 } 50% { opacity: .35 } }
+.fg-pulse { animation: fg-pulse 1.6s ease-in-out infinite; }
+
+@keyframes fg-ring { 0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-cyan) 45%, transparent) } 100% { box-shadow: 0 0 0 10px transparent } }
+.fg-running-ring { animation: fg-ring 1.4s ease-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fg-edge-live path.react-flow__edge-path, .fg-pulse, .fg-running-ring { animation: none; }
+  .fg-particle { display: none; }
+}
+
+/* React Flow chrome tuned to the palette */
+.react-flow { --xy-background-color: transparent; }
+.react-flow__controls { box-shadow: none !important; border: 1px solid var(--color-line); border-radius: 8px; overflow: hidden; }
+.react-flow__controls-button { background: var(--color-surface) !important; border-bottom: 1px solid var(--color-line) !important; fill: var(--color-ink-2) !important; color: var(--color-ink-2) !important; }
+.react-flow__controls-button:hover { background: var(--color-raised) !important; }
+.react-flow__controls-button svg { fill: currentColor; }
+.react-flow__attribution { display: none; }
+.react-flow__handle { width: 8px; height: 8px; background: var(--color-ground); border: 1.5px solid var(--color-ink-3); }
+.react-flow__handle:hover { border-color: var(--color-violet); }
+.react-flow__minimap { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 8px; }
+.react-flow__edge-textbg { rx: 4; }
+
+/* Scrollbars */
+* { scrollbar-width: thin; scrollbar-color: var(--color-line) transparent; }

@@ -1,0 +1,10 @@
+.env
+*.env.local
+node_modules/
+frontend/dist/
+frontend/tsconfig.tsbuildinfo
+*.log
+!benchmarks/run.log
+.idea/
+.vscode/
+.DS_Store

@@ -1,0 +1,2288 @@
+{
+  "generatedAt": "2026-11-12T18:38:00.660Z",
+  "lastRunStartedAt": "2026-11-12T18:27:33.113Z",
+  "environment": {
+    "cpuModel": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "logicalCpus": 2,
+    "memoryGb": 7.8,
+    "os": "Linux 6.18.44-fc-v378 (x64)",
+    "node": "v22.23.4",
+    "postgres": "psql (PostgreSQL) 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)",
+    "redis": "v=7.0.15",
+    "topology": "everything on one machine: Postgres, Redis, scheduler process, worker processes and the load generator share the same CPUs",
+    "postgresConfig": "shared_buffers=512MB, synchronous_commit=on, fsync=on (defaults otherwise)",
+    "redisConfig": "appendonly yes (everysec)"
+  },
+  "scenarios": [
+    {
+      "id": "scale-1k",
+      "group": "scale",
+      "label": "1,000 tasks",
+      "config": {
+        "workers": 4,
+        "concurrencyPerWorker": 32,
+        "totalSlots": 128,
+        "taskType": "core.sleep",
+        "taskDurationMs": 10,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 100,
+        "tasks": 1000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 333
+      },
+      "outcome": {
+        "workflowsSucceeded": 100,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 1000,
+        "tasksFailed": 0,
+        "attempts": 1000
+      },
+      "throughput": {
+        "tasksPerSec": 235.9,
+        "workflowsPerSec": 23.6,
+        "windowMs": 4238,
+        "makespanMs": 4238
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 193,
+          "p95": 366.3,
+          "p99": 483,
+          "avg": 209.3,
+          "max": 587
+        },
+        "schedulingDelay": {
+          "p50": 389.7,
+          "p95": 1902.7,
+          "p99": 2046,
+          "avg": 693,
+          "max": 2064.1
+        },
+        "queueWait": {
+          "p50": 891.2,
+          "p95": 1189.8,
+          "p99": 1230.3,
+          "avg": 766.5,
+          "max": 1265.4
+        },
+        "taskEndToEnd": {
+          "p50": 1644.8,
+          "p95": 2994.6,
+          "p99": 3087.6,
+          "avg": 1668.7,
+          "max": 3146.6
+        },
+        "workflowCompletion": {
+          "p50": 4092.2,
+          "p95": 4200.3,
+          "p99": 4237.8,
+          "avg": 4093,
+          "max": 4238.4
+        }
+      },
+      "workers": {
+        "utilization": 38.57,
+        "peakParallelTasks": 104,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 238
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 244
+          },
+          {
+            "worker_id": "bench-w2",
+            "n": 232
+          },
+          {
+            "worker_id": "bench-w3",
+            "n": 286
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 11.3,
+          "peakCpuPct": 12,
+          "peakRssMb": 126.1
+        },
+        "workers": {
+          "avgCpuPct": 60.3,
+          "peakCpuPct": 65.7,
+          "peakRssMb": 508.5
+        },
+        "postgres": {
+          "avgCpuPct": 113.9,
+          "peakCpuPct": 116.8,
+          "peakRssMb": 2171.4
+        },
+        "redis": {
+          "avgCpuPct": 5,
+          "peakCpuPct": 6,
+          "peakRssMb": 8.9
+        }
+      },
+      "testDurationMs": 7013,
+      "ranAt": "2026-11-12T18:27:33.114Z"
+    },
+    {
+      "id": "scale-10k",
+      "group": "scale",
+      "label": "10,000 tasks",
+      "config": {
+        "workers": 4,
+        "concurrencyPerWorker": 32,
+        "totalSlots": 128,
+        "taskType": "core.sleep",
+        "taskDurationMs": 10,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 1000,
+        "tasks": 10000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 1804
+      },
+      "outcome": {
+        "workflowsSucceeded": 1000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 10000,
+        "tasksFailed": 0,
+        "attempts": 10000
+      },
+      "throughput": {
+        "tasksPerSec": 324.8,
+        "workflowsPerSec": 32.5,
+        "windowMs": 30787,
+        "makespanMs": 30787
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 152,
+          "p95": 278,
+          "p99": 391,
+          "avg": 164.6,
+          "max": 601
+        },
+        "schedulingDelay": {
+          "p50": 11565.8,
+          "p95": 22256.9,
+          "p99": 23057.5,
+          "avg": 11703.9,
+          "max": 23179.7
+        },
+        "queueWait": {
+          "p50": 730.5,
+          "p95": 992.9,
+          "p99": 1083.5,
+          "avg": 746.5,
+          "max": 1301.7
+        },
+        "taskEndToEnd": {
+          "p50": 12373.9,
+          "p95": 23103.9,
+          "p99": 23919.5,
+          "avg": 12615,
+          "max": 24098.8
+        },
+        "workflowCompletion": {
+          "p50": 29777.3,
+          "p95": 30714.5,
+          "p99": 30774,
+          "avg": 29745,
+          "max": 30787.4
+        }
+      },
+      "workers": {
+        "utilization": 41.769999999999996,
+        "peakParallelTasks": 128,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 2460
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 2614
+          },
+          {
+            "worker_id": "bench-w2",
+            "n": 2534
+          },
+          {
+            "worker_id": "bench-w3",
+            "n": 2392
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 7.3,
+          "peakCpuPct": 12,
+          "peakRssMb": 158.3
+        },
+        "workers": {
+          "avgCpuPct": 41.1,
+          "peakCpuPct": 61,
+          "peakRssMb": 623.6
+        },
+        "postgres": {
+          "avgCpuPct": 134.2,
+          "peakCpuPct": 160.5,
+          "peakRssMb": 3880.3
+        },
+        "redis": {
+          "avgCpuPct": 4.8,
+          "peakCpuPct": 6.9,
+          "peakRssMb": 10.3
+        }
+      },
+      "testDurationMs": 34908,
+      "ranAt": "2026-11-12T18:27:40.171Z"
+    },
+    {
+      "id": "scale-50k",
+      "group": "scale",
+      "label": "50,000 tasks",
+      "config": {
+        "workers": 4,
+        "concurrencyPerWorker": 32,
+        "totalSlots": 128,
+        "taskType": "core.sleep",
+        "taskDurationMs": 10,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 5000,
+        "tasks": 50000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 7673
+      },
+      "outcome": {
+        "workflowsSucceeded": 5000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 50000,
+        "tasksFailed": 0,
+        "attempts": 50000
+      },
+      "throughput": {
+        "tasksPerSec": 354.5,
+        "workflowsPerSec": 35.4,
+        "windowMs": 141058,
+        "makespanMs": 141058
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 138,
+          "p95": 266,
+          "p99": 375,
+          "avg": 151.4,
+          "max": 1738
+        },
+        "schedulingDelay": {
+          "p50": 57795.4,
+          "p95": 104361.7,
+          "p99": 108816.2,
+          "avg": 57605.3,
+          "max": 109897.3
+        },
+        "queueWait": {
+          "p50": 658.8,
+          "p95": 943.5,
+          "p99": 1128,
+          "avg": 680.9,
+          "max": 1699.2
+        },
+        "taskEndToEnd": {
+          "p50": 58512.2,
+          "p95": 105169.4,
+          "p99": 109636,
+          "avg": 58437.6,
+          "max": 110874.3
+        },
+        "workflowCompletion": {
+          "p50": 135690.3,
+          "p95": 140630,
+          "p99": 140977.9,
+          "avg": 135663.1,
+          "max": 141057.5
+        }
+      },
+      "workers": {
+        "utilization": 41.92,
+        "peakParallelTasks": 109,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 12714
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 12181
+          },
+          {
+            "worker_id": "bench-w2",
+            "n": 12409
+          },
+          {
+            "worker_id": "bench-w3",
+            "n": 12696
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 5.9,
+          "peakCpuPct": 10.9,
+          "peakRssMb": 155.9
+        },
+        "workers": {
+          "avgCpuPct": 34.1,
+          "peakCpuPct": 63.9,
+          "peakRssMb": 632.1
+        },
+        "postgres": {
+          "avgCpuPct": 143.2,
+          "peakCpuPct": 178,
+          "peakRssMb": 8090.9
+        },
+        "redis": {
+          "avgCpuPct": 4.7,
+          "peakCpuPct": 6.9,
+          "peakRssMb": 17.6
+        }
+      },
+      "testDurationMs": 150996,
+      "ranAt": "2026-11-12T18:28:15.134Z"
+    },
+    {
+      "id": "workers-1",
+      "group": "workers",
+      "label": "1 worker",
+      "config": {
+        "workers": 1,
+        "concurrencyPerWorker": 16,
+        "totalSlots": 16,
+        "taskType": "core.sleep",
+        "taskDurationMs": 50,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 1000,
+        "tasks": 10000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 1747
+      },
+      "outcome": {
+        "workflowsSucceeded": 1000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 10000,
+        "tasksFailed": 0,
+        "attempts": 10000
+      },
+      "throughput": {
+        "tasksPerSec": 221.3,
+        "workflowsPerSec": 22.1,
+        "windowMs": 45190,
+        "makespanMs": 45190
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 55,
+          "p95": 68,
+          "p99": 78,
+          "avg": 56.3,
+          "max": 128
+        },
+        "schedulingDelay": {
+          "p50": 17928.4,
+          "p95": 33285.8,
+          "p99": 34650.3,
+          "avg": 18024.1,
+          "max": 34942.5
+        },
+        "queueWait": {
+          "p50": 130.1,
+          "p95": 178.8,
+          "p99": 195.9,
+          "avg": 135.6,
+          "max": 259.8
+        },
+        "taskEndToEnd": {
+          "p50": 18103.4,
+          "p95": 33480.4,
+          "p99": 34827,
+          "avg": 18216,
+          "max": 35113.2
+        },
+        "workflowCompletion": {
+          "p50": 43131.4,
+          "p95": 44979.7,
+          "p99": 45159.1,
+          "avg": 43136.6,
+          "max": 45190.3
+        }
+      },
+      "workers": {
+        "utilization": 77.89,
+        "peakParallelTasks": 16,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 10000
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 12.4,
+          "peakCpuPct": 19,
+          "peakRssMb": 156.7
+        },
+        "workers": {
+          "avgCpuPct": 22.8,
+          "peakCpuPct": 41,
+          "peakRssMb": 156
+        },
+        "postgres": {
+          "avgCpuPct": 95.9,
+          "peakCpuPct": 119,
+          "peakRssMb": 1948.2
+        },
+        "redis": {
+          "avgCpuPct": 4.1,
+          "peakCpuPct": 6,
+          "peakRssMb": 10.2
+        }
+      },
+      "testDurationMs": 48370,
+      "ranAt": "2026-11-12T18:30:46.174Z"
+    },
+    {
+      "id": "workers-2",
+      "group": "workers",
+      "label": "2 workers",
+      "config": {
+        "workers": 2,
+        "concurrencyPerWorker": 16,
+        "totalSlots": 32,
+        "taskType": "core.sleep",
+        "taskDurationMs": 50,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 1000,
+        "tasks": 10000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 1792
+      },
+      "outcome": {
+        "workflowsSucceeded": 1000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 10000,
+        "tasksFailed": 0,
+        "attempts": 10000
+      },
+      "throughput": {
+        "tasksPerSec": 307.4,
+        "workflowsPerSec": 30.7,
+        "windowMs": 32536,
+        "makespanMs": 32536
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 59.5,
+          "p95": 87,
+          "p99": 111,
+          "avg": 63,
+          "max": 207
+        },
+        "schedulingDelay": {
+          "p50": 13104.1,
+          "p95": 23696.1,
+          "p99": 24742,
+          "avg": 13135.8,
+          "max": 24985.5
+        },
+        "queueWait": {
+          "p50": 185.4,
+          "p95": 266.2,
+          "p99": 315.7,
+          "avg": 191.6,
+          "max": 399.3
+        },
+        "taskEndToEnd": {
+          "p50": 13336.1,
+          "p95": 23972,
+          "p99": 24999.3,
+          "avg": 13390.3,
+          "max": 25207.8
+        },
+        "workflowCompletion": {
+          "p50": 31269,
+          "p95": 32414.3,
+          "p99": 32530.5,
+          "avg": 31263,
+          "max": 32535.9
+        }
+      },
+      "workers": {
+        "utilization": 60.48,
+        "peakParallelTasks": 32,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 5017
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 4983
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 10.3,
+          "peakCpuPct": 16,
+          "peakRssMb": 156.3
+        },
+        "workers": {
+          "avgCpuPct": 33.7,
+          "peakCpuPct": 56.9,
+          "peakRssMb": 313.6
+        },
+        "postgres": {
+          "avgCpuPct": 127.3,
+          "peakCpuPct": 145,
+          "peakRssMb": 2587.9
+        },
+        "redis": {
+          "avgCpuPct": 4.7,
+          "peakCpuPct": 6,
+          "peakRssMb": 10.3
+        }
+      },
+      "testDurationMs": 36030,
+      "ranAt": "2026-11-12T18:31:34.591Z"
+    },
+    {
+      "id": "workers-4",
+      "group": "workers",
+      "label": "4 workers",
+      "config": {
+        "workers": 4,
+        "concurrencyPerWorker": 16,
+        "totalSlots": 64,
+        "taskType": "core.sleep",
+        "taskDurationMs": 50,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 1000,
+        "tasks": 10000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 1801
+      },
+      "outcome": {
+        "workflowsSucceeded": 1000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 10000,
+        "tasksFailed": 0,
+        "attempts": 10000
+      },
+      "throughput": {
+        "tasksPerSec": 335.4,
+        "workflowsPerSec": 33.5,
+        "windowMs": 29816,
+        "makespanMs": 29816
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 78,
+          "p95": 130,
+          "p99": 182,
+          "avg": 84.1,
+          "max": 310
+        },
+        "schedulingDelay": {
+          "p50": 11847.7,
+          "p95": 21447.6,
+          "p99": 22522.2,
+          "avg": 11832.1,
+          "max": 22756
+        },
+        "queueWait": {
+          "p50": 345.7,
+          "p95": 476.4,
+          "p99": 554.3,
+          "avg": 354.4,
+          "max": 648
+        },
+        "taskEndToEnd": {
+          "p50": 12260.1,
+          "p95": 21953.9,
+          "p99": 23043.3,
+          "avg": 12270.6,
+          "max": 23302.8
+        },
+        "workflowCompletion": {
+          "p50": 28788.7,
+          "p95": 29724.7,
+          "p99": 29803.6,
+          "avg": 28758.6,
+          "max": 29816.1
+        }
+      },
+      "workers": {
+        "utilization": 44.05,
+        "peakParallelTasks": 64,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 2502
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 2486
+          },
+          {
+            "worker_id": "bench-w2",
+            "n": 2585
+          },
+          {
+            "worker_id": "bench-w3",
+            "n": 2427
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 7.7,
+          "peakCpuPct": 14,
+          "peakRssMb": 154.4
+        },
+        "workers": {
+          "avgCpuPct": 42.2,
+          "peakCpuPct": 68.3,
+          "peakRssMb": 625.4
+        },
+        "postgres": {
+          "avgCpuPct": 133.6,
+          "peakCpuPct": 160.8,
+          "peakRssMb": 4117.8
+        },
+        "redis": {
+          "avgCpuPct": 4.9,
+          "peakCpuPct": 7,
+          "peakRssMb": 10.3
+        }
+      },
+      "testDurationMs": 33732,
+      "ranAt": "2026-11-12T18:32:10.665Z"
+    },
+    {
+      "id": "conc-4",
+      "group": "concurrency",
+      "label": "concurrency 4",
+      "config": {
+        "workers": 2,
+        "concurrencyPerWorker": 4,
+        "totalSlots": 8,
+        "taskType": "core.sleep",
+        "taskDurationMs": 50,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 500,
+        "tasks": 5000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 894
+      },
+      "outcome": {
+        "workflowsSucceeded": 500,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 5000,
+        "tasksFailed": 0,
+        "attempts": 5000
+      },
+      "throughput": {
+        "tasksPerSec": 133.1,
+        "workflowsPerSec": 13.3,
+        "windowMs": 37568,
+        "makespanMs": 37568
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 53,
+          "p95": 58,
+          "p99": 63,
+          "avg": 53.6,
+          "max": 91
+        },
+        "schedulingDelay": {
+          "p50": 15147,
+          "p95": 27856.8,
+          "p99": 29011.5,
+          "avg": 15171.6,
+          "max": 29278.9
+        },
+        "queueWait": {
+          "p50": 112.1,
+          "p95": 132.2,
+          "p99": 148.7,
+          "avg": 114.1,
+          "max": 164.1
+        },
+        "taskEndToEnd": {
+          "p50": 15313,
+          "p95": 28023,
+          "p99": 29176.9,
+          "avg": 15339.4,
+          "max": 29442.5
+        },
+        "workflowCompletion": {
+          "p50": 35742.5,
+          "p95": 37389.2,
+          "p99": 37542.5,
+          "avg": 35754.4,
+          "max": 37567.8
+        }
+      },
+      "workers": {
+        "utilization": 89.22999999999999,
+        "peakParallelTasks": 8,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 2498
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 2502
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 13.3,
+          "peakCpuPct": 19,
+          "peakRssMb": 156.8
+        },
+        "workers": {
+          "avgCpuPct": 22.7,
+          "peakCpuPct": 36,
+          "peakRssMb": 312.1
+        },
+        "postgres": {
+          "avgCpuPct": 64.9,
+          "peakCpuPct": 72,
+          "peakRssMb": 1514.8
+        },
+        "redis": {
+          "avgCpuPct": 3.3,
+          "peakCpuPct": 4,
+          "peakRssMb": 9.3
+        }
+      },
+      "testDurationMs": 40027,
+      "ranAt": "2026-11-12T18:32:44.449Z"
+    },
+    {
+      "id": "conc-16",
+      "group": "concurrency",
+      "label": "concurrency 16",
+      "config": {
+        "workers": 2,
+        "concurrencyPerWorker": 16,
+        "totalSlots": 32,
+        "taskType": "core.sleep",
+        "taskDurationMs": 50,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 1000,
+        "tasks": 10000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 1614
+      },
+      "outcome": {
+        "workflowsSucceeded": 1000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 10000,
+        "tasksFailed": 0,
+        "attempts": 10000
+      },
+      "throughput": {
+        "tasksPerSec": 337.9,
+        "workflowsPerSec": 33.8,
+        "windowMs": 29591,
+        "makespanMs": 29591
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 58,
+          "p95": 78,
+          "p99": 103,
+          "avg": 60.5,
+          "max": 185
+        },
+        "schedulingDelay": {
+          "p50": 12219.8,
+          "p95": 21725.1,
+          "p99": 22562.6,
+          "avg": 12103.6,
+          "max": 22763.7
+        },
+        "queueWait": {
+          "p50": 169.9,
+          "p95": 242.2,
+          "p99": 276.5,
+          "avg": 175,
+          "max": 347.1
+        },
+        "taskEndToEnd": {
+          "p50": 12445.2,
+          "p95": 21944.3,
+          "p99": 22779.4,
+          "avg": 12339.1,
+          "max": 22985.9
+        },
+        "workflowCompletion": {
+          "p50": 28357.4,
+          "p95": 29472.2,
+          "p99": 29572.4,
+          "avg": 28366.7,
+          "max": 29591
+        }
+      },
+      "workers": {
+        "utilization": 63.89,
+        "peakParallelTasks": 32,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 5058
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 4942
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 10.5,
+          "peakCpuPct": 15,
+          "peakRssMb": 157.7
+        },
+        "workers": {
+          "avgCpuPct": 34.4,
+          "peakCpuPct": 54,
+          "peakRssMb": 311
+        },
+        "postgres": {
+          "avgCpuPct": 127.5,
+          "peakCpuPct": 138.2,
+          "peakRssMb": 2651.6
+        },
+        "redis": {
+          "avgCpuPct": 4.9,
+          "peakCpuPct": 6,
+          "peakRssMb": 10.3
+        }
+      },
+      "testDurationMs": 32667,
+      "ranAt": "2026-11-12T18:33:24.520Z"
+    },
+    {
+      "id": "conc-64",
+      "group": "concurrency",
+      "label": "concurrency 64",
+      "config": {
+        "workers": 2,
+        "concurrencyPerWorker": 64,
+        "totalSlots": 128,
+        "taskType": "core.sleep",
+        "taskDurationMs": 50,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 1000,
+        "tasks": 10000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 1482
+      },
+      "outcome": {
+        "workflowsSucceeded": 1000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 10000,
+        "tasksFailed": 0,
+        "attempts": 10000
+      },
+      "throughput": {
+        "tasksPerSec": 375.7,
+        "workflowsPerSec": 37.6,
+        "windowMs": 26615,
+        "makespanMs": 26615
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 173,
+          "p95": 246,
+          "p99": 303,
+          "avg": 178.3,
+          "max": 436
+        },
+        "schedulingDelay": {
+          "p50": 10599.8,
+          "p95": 19404.3,
+          "p99": 20212.1,
+          "avg": 10435.3,
+          "max": 20474.8
+        },
+        "queueWait": {
+          "p50": 660.7,
+          "p95": 796.7,
+          "p99": 870.2,
+          "avg": 652.3,
+          "max": 921.8
+        },
+        "taskEndToEnd": {
+          "p50": 11493.8,
+          "p95": 20215.5,
+          "p99": 21037.3,
+          "avg": 11265.9,
+          "max": 21254.9
+        },
+        "workflowCompletion": {
+          "p50": 25686.6,
+          "p95": 26531.7,
+          "p99": 26592.6,
+          "avg": 25694.5,
+          "max": 26615.2
+        }
+      },
+      "workers": {
+        "utilization": 52.339999999999996,
+        "peakParallelTasks": 128,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 5286
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 4714
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 9.5,
+          "peakCpuPct": 16,
+          "peakRssMb": 162.1
+        },
+        "workers": {
+          "avgCpuPct": 35,
+          "peakCpuPct": 57,
+          "peakRssMb": 312.3
+        },
+        "postgres": {
+          "avgCpuPct": 133.1,
+          "peakCpuPct": 149.6,
+          "peakRssMb": 2612.2
+        },
+        "redis": {
+          "avgCpuPct": 5.1,
+          "peakCpuPct": 6,
+          "peakRssMb": 10.3
+        }
+      },
+      "testDurationMs": 29773,
+      "ranAt": "2026-11-12T18:33:57.233Z"
+    },
+    {
+      "id": "dur-0",
+      "group": "duration",
+      "label": "0 ms (noop)",
+      "config": {
+        "workers": 4,
+        "concurrencyPerWorker": 32,
+        "totalSlots": 128,
+        "taskType": "core.noop",
+        "taskDurationMs": 0,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 1000,
+        "tasks": 10000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 1433
+      },
+      "outcome": {
+        "workflowsSucceeded": 1000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 10000,
+        "tasksFailed": 0,
+        "attempts": 10000
+      },
+      "throughput": {
+        "tasksPerSec": 357.6,
+        "workflowsPerSec": 35.8,
+        "windowMs": 27966,
+        "makespanMs": 27966
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 130,
+          "p95": 256,
+          "p99": 397,
+          "avg": 143.1,
+          "max": 620
+        },
+        "schedulingDelay": {
+          "p50": 11426.9,
+          "p95": 20144.6,
+          "p99": 20863.4,
+          "avg": 11145.7,
+          "max": 21016.8
+        },
+        "queueWait": {
+          "p50": 667.1,
+          "p95": 936.1,
+          "p99": 1062.8,
+          "avg": 675.7,
+          "max": 1288.8
+        },
+        "taskEndToEnd": {
+          "p50": 12245.3,
+          "p95": 20907.6,
+          "p99": 21515.1,
+          "avg": 11964.5,
+          "max": 21757.7
+        },
+        "workflowCompletion": {
+          "p50": 26985.7,
+          "p95": 27878.3,
+          "p99": 27946.1,
+          "avg": 26974.5,
+          "max": 27965.9
+        }
+      },
+      "workers": {
+        "utilization": 39.980000000000004,
+        "peakParallelTasks": 128,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 2490
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 2609
+          },
+          {
+            "worker_id": "bench-w2",
+            "n": 2483
+          },
+          {
+            "worker_id": "bench-w3",
+            "n": 2418
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 7.4,
+          "peakCpuPct": 12.9,
+          "peakRssMb": 156.3
+        },
+        "workers": {
+          "avgCpuPct": 42.1,
+          "peakCpuPct": 63.9,
+          "peakRssMb": 627.7
+        },
+        "postgres": {
+          "avgCpuPct": 134.9,
+          "peakCpuPct": 163.7,
+          "peakRssMb": 4153.7
+        },
+        "redis": {
+          "avgCpuPct": 4.9,
+          "peakCpuPct": 6,
+          "peakRssMb": 10.3
+        }
+      },
+      "testDurationMs": 31679,
+      "ranAt": "2026-11-12T18:34:27.051Z"
+    },
+    {
+      "id": "dur-10",
+      "group": "duration",
+      "label": "10 ms",
+      "config": {
+        "workers": 4,
+        "concurrencyPerWorker": 32,
+        "totalSlots": 128,
+        "taskType": "core.sleep",
+        "taskDurationMs": 10,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 1000,
+        "tasks": 10000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 1444
+      },
+      "outcome": {
+        "workflowsSucceeded": 1000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 10000,
+        "tasksFailed": 0,
+        "attempts": 10000
+      },
+      "throughput": {
+        "tasksPerSec": 353.3,
+        "workflowsPerSec": 35.3,
+        "windowMs": 28303,
+        "makespanMs": 28303
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 136,
+          "p95": 280,
+          "p99": 383,
+          "avg": 150.1,
+          "max": 566
+        },
+        "schedulingDelay": {
+          "p50": 11729.4,
+          "p95": 19941.5,
+          "p99": 20725.5,
+          "avg": 11254.3,
+          "max": 20849
+        },
+        "queueWait": {
+          "p50": 654.2,
+          "p95": 1011.8,
+          "p99": 1144,
+          "avg": 686.6,
+          "max": 1333.2
+        },
+        "taskEndToEnd": {
+          "p50": 12466.5,
+          "p95": 20717.4,
+          "p99": 21432.4,
+          "avg": 12090.9,
+          "max": 21616.1
+        },
+        "workflowCompletion": {
+          "p50": 27316.8,
+          "p95": 28224.5,
+          "p99": 28281.3,
+          "avg": 27261.5,
+          "max": 28303
+        }
+      },
+      "workers": {
+        "utilization": 41.43,
+        "peakParallelTasks": 128,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 2456
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 2527
+          },
+          {
+            "worker_id": "bench-w2",
+            "n": 2647
+          },
+          {
+            "worker_id": "bench-w3",
+            "n": 2370
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 7.6,
+          "peakCpuPct": 12,
+          "peakRssMb": 155.4
+        },
+        "workers": {
+          "avgCpuPct": 43.7,
+          "peakCpuPct": 67.6,
+          "peakRssMb": 625
+        },
+        "postgres": {
+          "avgCpuPct": 132.8,
+          "peakCpuPct": 177.3,
+          "peakRssMb": 3972.5
+        },
+        "redis": {
+          "avgCpuPct": 4.9,
+          "peakCpuPct": 6,
+          "peakRssMb": 10.4
+        }
+      },
+      "testDurationMs": 31749,
+      "ranAt": "2026-11-12T18:34:58.773Z"
+    },
+    {
+      "id": "dur-100",
+      "group": "duration",
+      "label": "100 ms",
+      "config": {
+        "workers": 4,
+        "concurrencyPerWorker": 32,
+        "totalSlots": 128,
+        "taskType": "core.sleep",
+        "taskDurationMs": 100,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 1000,
+        "tasks": 10000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 1826
+      },
+      "outcome": {
+        "workflowsSucceeded": 1000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 10000,
+        "tasksFailed": 0,
+        "attempts": 10000
+      },
+      "throughput": {
+        "tasksPerSec": 349.3,
+        "workflowsPerSec": 34.9,
+        "windowMs": 28629,
+        "makespanMs": 28629
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 183,
+          "p95": 309,
+          "p99": 422,
+          "avg": 194.9,
+          "max": 560
+        },
+        "schedulingDelay": {
+          "p50": 11373.8,
+          "p95": 20315.4,
+          "p99": 21102.9,
+          "avg": 11168,
+          "max": 21186.6
+        },
+        "queueWait": {
+          "p50": 673.7,
+          "p95": 998.5,
+          "p99": 1153.1,
+          "avg": 691.6,
+          "max": 1362.8
+        },
+        "taskEndToEnd": {
+          "p50": 12186,
+          "p95": 21135.1,
+          "p99": 21904.8,
+          "avg": 12054.5,
+          "max": 22071.3
+        },
+        "workflowCompletion": {
+          "p50": 27641.9,
+          "p95": 28546.5,
+          "p99": 28590.1,
+          "avg": 27644.9,
+          "max": 28629.3
+        }
+      },
+      "workers": {
+        "utilization": 53.2,
+        "peakParallelTasks": 128,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 2594
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 2397
+          },
+          {
+            "worker_id": "bench-w2",
+            "n": 2512
+          },
+          {
+            "worker_id": "bench-w3",
+            "n": 2497
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 7.4,
+          "peakCpuPct": 12,
+          "peakRssMb": 164.1
+        },
+        "workers": {
+          "avgCpuPct": 42.8,
+          "peakCpuPct": 65.8,
+          "peakRssMb": 621.3
+        },
+        "postgres": {
+          "avgCpuPct": 135.7,
+          "peakCpuPct": 172,
+          "peakRssMb": 4007.3
+        },
+        "redis": {
+          "avgCpuPct": 4.8,
+          "peakCpuPct": 6,
+          "peakRssMb": 10.3
+        }
+      },
+      "testDurationMs": 32590,
+      "ranAt": "2026-11-12T18:35:30.571Z"
+    },
+    {
+      "id": "strategy-fifo",
+      "group": "strategy",
+      "label": "FIFO",
+      "config": {
+        "workers": 1,
+        "concurrencyPerWorker": 8,
+        "totalSlots": 8,
+        "taskType": "core.sleep",
+        "taskDurationMs": 20,
+        "dag": "single task",
+        "executions": 3000,
+        "tasks": 3000,
+        "strategy": "FIFO",
+        "queueFactor": 1,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 3751
+      },
+      "outcome": {
+        "workflowsSucceeded": 3000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 3000,
+        "tasksFailed": 0,
+        "attempts": 3000
+      },
+      "throughput": {
+        "tasksPerSec": 225.1,
+        "workflowsPerSec": 225.1,
+        "windowMs": 13326,
+        "makespanMs": 13326
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 27,
+          "p95": 32,
+          "p99": 36,
+          "avg": 27.4,
+          "max": 45
+        },
+        "schedulingDelay": {
+          "p50": 6785.2,
+          "p95": 12666,
+          "p99": 13165.4,
+          "avg": 6804.6,
+          "max": 13274
+        },
+        "queueWait": {
+          "p50": 27.7,
+          "p95": 35.2,
+          "p99": 39.6,
+          "avg": 27.8,
+          "max": 48.2
+        },
+        "taskEndToEnd": {
+          "p50": 6846.1,
+          "p95": 12716.6,
+          "p99": 13209.6,
+          "avg": 6859.9,
+          "max": 13325.9
+        },
+        "workflowCompletion": {
+          "p50": 6846.2,
+          "p95": 12716.7,
+          "p99": 13209.7,
+          "avg": 6860,
+          "max": 13326
+        }
+      },
+      "workers": {
+        "utilization": 77.24,
+        "peakParallelTasks": 8,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 3000
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "byPriority": [
+        {
+          "priority": 1,
+          "tasks": 300,
+          "waitMs": {
+            "p50": 6567.1,
+            "p95": 12674.3,
+            "max": 13271.6
+          }
+        },
+        {
+          "priority": 2,
+          "tasks": 325,
+          "waitMs": {
+            "p50": 7002.1,
+            "p95": 12617,
+            "max": 13259
+          }
+        },
+        {
+          "priority": 3,
+          "tasks": 334,
+          "waitMs": {
+            "p50": 6457.3,
+            "p95": 12512,
+            "max": 13230.9
+          }
+        },
+        {
+          "priority": 4,
+          "tasks": 360,
+          "waitMs": {
+            "p50": 7079.8,
+            "p95": 12656.7,
+            "max": 13292.4
+          }
+        },
+        {
+          "priority": 5,
+          "tasks": 352,
+          "waitMs": {
+            "p50": 6369.7,
+            "p95": 12865.1,
+            "max": 13239.7
+          }
+        },
+        {
+          "priority": 6,
+          "tasks": 338,
+          "waitMs": {
+            "p50": 7108.1,
+            "p95": 12765.7,
+            "max": 13303.1
+          }
+        },
+        {
+          "priority": 7,
+          "tasks": 328,
+          "waitMs": {
+            "p50": 6916.7,
+            "p95": 12854.4,
+            "max": 13292.1
+          }
+        },
+        {
+          "priority": 8,
+          "tasks": 312,
+          "waitMs": {
+            "p50": 6820.9,
+            "p95": 12479.6,
+            "max": 13263.5
+          }
+        },
+        {
+          "priority": 9,
+          "tasks": 351,
+          "waitMs": {
+            "p50": 6662.4,
+            "p95": 12741.5,
+            "max": 13298.5
+          }
+        }
+      ],
+      "deadlines": {
+        "missed": 100,
+        "total": 3000,
+        "missRate": 0.0333
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 13.7,
+          "peakCpuPct": 18,
+          "peakRssMb": 147.6
+        },
+        "workers": {
+          "avgCpuPct": 22.2,
+          "peakCpuPct": 40,
+          "peakRssMb": 165.2
+        },
+        "postgres": {
+          "avgCpuPct": 96.4,
+          "peakCpuPct": 151,
+          "peakRssMb": 1698.7
+        },
+        "redis": {
+          "avgCpuPct": 3.7,
+          "peakCpuPct": 5,
+          "peakRssMb": 8.9
+        }
+      },
+      "testDurationMs": 18469,
+      "ranAt": "2026-11-12T18:36:03.214Z"
+    },
+    {
+      "id": "strategy-priority",
+      "group": "strategy",
+      "label": "PRIORITY (+aging)",
+      "config": {
+        "workers": 1,
+        "concurrencyPerWorker": 8,
+        "totalSlots": 8,
+        "taskType": "core.sleep",
+        "taskDurationMs": 20,
+        "dag": "single task",
+        "executions": 3000,
+        "tasks": 3000,
+        "strategy": "PRIORITY",
+        "queueFactor": 1,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 3999
+      },
+      "outcome": {
+        "workflowsSucceeded": 3000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 3000,
+        "tasksFailed": 0,
+        "attempts": 3000
+      },
+      "throughput": {
+        "tasksPerSec": 216.8,
+        "workflowsPerSec": 216.8,
+        "windowMs": 13841,
+        "makespanMs": 13841
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 27,
+          "p95": 34,
+          "p99": 40,
+          "avg": 28.1,
+          "max": 55
+        },
+        "schedulingDelay": {
+          "p50": 7264.7,
+          "p95": 13199.7,
+          "p99": 13672.6,
+          "avg": 7183,
+          "max": 13783.3
+        },
+        "queueWait": {
+          "p50": 27.5,
+          "p95": 39,
+          "p99": 46.7,
+          "avg": 28.3,
+          "max": 58.3
+        },
+        "taskEndToEnd": {
+          "p50": 7340.9,
+          "p95": 13252.1,
+          "p99": 13720.1,
+          "avg": 7239.4,
+          "max": 13840.2
+        },
+        "workflowCompletion": {
+          "p50": 7341.3,
+          "p95": 13252.6,
+          "p99": 13720.6,
+          "avg": 7239.9,
+          "max": 13840.7
+        }
+      },
+      "workers": {
+        "utilization": 76,
+        "peakParallelTasks": 8,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 3000
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "byPriority": [
+        {
+          "priority": 1,
+          "tasks": 326,
+          "waitMs": {
+            "p50": 13181.9,
+            "p95": 13743.8,
+            "max": 13815.2
+          }
+        },
+        {
+          "priority": 2,
+          "tasks": 310,
+          "waitMs": {
+            "p50": 11898.1,
+            "p95": 12454.4,
+            "max": 12520.4
+          }
+        },
+        {
+          "priority": 3,
+          "tasks": 309,
+          "waitMs": {
+            "p50": 10567.1,
+            "p95": 11151.3,
+            "max": 11214.4
+          }
+        },
+        {
+          "priority": 4,
+          "tasks": 339,
+          "waitMs": {
+            "p50": 8937.7,
+            "p95": 9695.7,
+            "max": 9796
+          }
+        },
+        {
+          "priority": 5,
+          "tasks": 344,
+          "waitMs": {
+            "p50": 7527.2,
+            "p95": 8130.3,
+            "max": 8203.9
+          }
+        },
+        {
+          "priority": 6,
+          "tasks": 359,
+          "waitMs": {
+            "p50": 5833.3,
+            "p95": 6605.5,
+            "max": 6701.3
+          }
+        },
+        {
+          "priority": 7,
+          "tasks": 370,
+          "waitMs": {
+            "p50": 4210.8,
+            "p95": 4954.1,
+            "max": 5036.7
+          }
+        },
+        {
+          "priority": 8,
+          "tasks": 312,
+          "waitMs": {
+            "p50": 2575.6,
+            "p95": 3261.7,
+            "max": 3345.8
+          }
+        },
+        {
+          "priority": 9,
+          "tasks": 331,
+          "waitMs": {
+            "p50": 979.3,
+            "p95": 1724.7,
+            "max": 1806.3
+          }
+        }
+      ],
+      "deadlines": {
+        "missed": 126,
+        "total": 3000,
+        "missRate": 0.042
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 13.7,
+          "peakCpuPct": 19,
+          "peakRssMb": 150.5
+        },
+        "workers": {
+          "avgCpuPct": 22.7,
+          "peakCpuPct": 44,
+          "peakRssMb": 154
+        },
+        "postgres": {
+          "avgCpuPct": 97.4,
+          "peakCpuPct": 139,
+          "peakRssMb": 1838.1
+        },
+        "redis": {
+          "avgCpuPct": 3.7,
+          "peakCpuPct": 5,
+          "peakRssMb": 8.9
+        }
+      },
+      "testDurationMs": 18967,
+      "ranAt": "2026-11-12T18:36:21.739Z"
+    },
+    {
+      "id": "strategy-edf",
+      "group": "strategy",
+      "label": "EDF",
+      "config": {
+        "workers": 1,
+        "concurrencyPerWorker": 8,
+        "totalSlots": 8,
+        "taskType": "core.sleep",
+        "taskDurationMs": 20,
+        "dag": "single task",
+        "executions": 3000,
+        "tasks": 3000,
+        "strategy": "EDF",
+        "queueFactor": 1,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 4036
+      },
+      "outcome": {
+        "workflowsSucceeded": 3000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 3000,
+        "tasksFailed": 0,
+        "attempts": 3000
+      },
+      "throughput": {
+        "tasksPerSec": 219.2,
+        "workflowsPerSec": 219.2,
+        "windowMs": 13689,
+        "makespanMs": 13689
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 27,
+          "p95": 34,
+          "p99": 40,
+          "avg": 27.9,
+          "max": 59
+        },
+        "schedulingDelay": {
+          "p50": 7270.1,
+          "p95": 12971.2,
+          "p99": 13469,
+          "avg": 7127.6,
+          "max": 13637.7
+        },
+        "queueWait": {
+          "p50": 27.6,
+          "p95": 37.8,
+          "p99": 44.1,
+          "avg": 28.2,
+          "max": 63.5
+        },
+        "taskEndToEnd": {
+          "p50": 7321,
+          "p95": 13013,
+          "p99": 13524.7,
+          "avg": 7183.8,
+          "max": 13688.6
+        },
+        "workflowCompletion": {
+          "p50": 7321.4,
+          "p95": 13013.4,
+          "p99": 13525.1,
+          "avg": 7184.2,
+          "max": 13689.1
+        }
+      },
+      "workers": {
+        "utilization": 76.49,
+        "peakParallelTasks": 8,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 3000
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "byPriority": [
+        {
+          "priority": 1,
+          "tasks": 359,
+          "waitMs": {
+            "p50": 7250.8,
+            "p95": 12863.8,
+            "max": 13593.2
+          }
+        },
+        {
+          "priority": 2,
+          "tasks": 338,
+          "waitMs": {
+            "p50": 7344.4,
+            "p95": 12824.8,
+            "max": 13625.6
+          }
+        },
+        {
+          "priority": 3,
+          "tasks": 351,
+          "waitMs": {
+            "p50": 7130,
+            "p95": 12971.3,
+            "max": 13631.4
+          }
+        },
+        {
+          "priority": 4,
+          "tasks": 328,
+          "waitMs": {
+            "p50": 6920.9,
+            "p95": 12807,
+            "max": 13618.4
+          }
+        },
+        {
+          "priority": 5,
+          "tasks": 321,
+          "waitMs": {
+            "p50": 7628.5,
+            "p95": 13056.9,
+            "max": 13664.6
+          }
+        },
+        {
+          "priority": 6,
+          "tasks": 325,
+          "waitMs": {
+            "p50": 7365.3,
+            "p95": 13124.5,
+            "max": 13629.4
+          }
+        },
+        {
+          "priority": 7,
+          "tasks": 319,
+          "waitMs": {
+            "p50": 7432,
+            "p95": 12913.9,
+            "max": 13651.4
+          }
+        },
+        {
+          "priority": 8,
+          "tasks": 328,
+          "waitMs": {
+            "p50": 7020.2,
+            "p95": 12793.2,
+            "max": 13533.2
+          }
+        },
+        {
+          "priority": 9,
+          "tasks": 331,
+          "waitMs": {
+            "p50": 7695.9,
+            "p95": 13119.7,
+            "max": 13663.5
+          }
+        }
+      ],
+      "deadlines": {
+        "missed": 0,
+        "total": 3000,
+        "missRate": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 13.7,
+          "peakCpuPct": 19,
+          "peakRssMb": 145.4
+        },
+        "workers": {
+          "avgCpuPct": 22.4,
+          "peakCpuPct": 41,
+          "peakRssMb": 154.7
+        },
+        "postgres": {
+          "avgCpuPct": 98.1,
+          "peakCpuPct": 143.7,
+          "peakRssMb": 1902.4
+        },
+        "redis": {
+          "avgCpuPct": 3.6,
+          "peakCpuPct": 5,
+          "peakRssMb": 8.9
+        }
+      },
+      "testDurationMs": 18942,
+      "ranAt": "2026-11-12T18:36:40.755Z"
+    },
+    {
+      "id": "latency-light",
+      "group": "latency",
+      "label": "light load (open loop)",
+      "config": {
+        "workers": 2,
+        "concurrencyPerWorker": 16,
+        "totalSlots": 32,
+        "taskType": "core.sleep",
+        "taskDurationMs": 10,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 200,
+        "tasks": 2000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0,
+        "openLoopSeconds": 20
+      },
+      "submission": {
+        "ms": 20001
+      },
+      "outcome": {
+        "workflowsSucceeded": 200,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 2000,
+        "tasksFailed": 0,
+        "attempts": 2000
+      },
+      "throughput": {
+        "tasksPerSec": 100.1,
+        "workflowsPerSec": 10,
+        "windowMs": 19985,
+        "makespanMs": 19985
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 16,
+          "p95": 21,
+          "p99": 23,
+          "avg": 16.4,
+          "max": 36
+        },
+        "schedulingDelay": {
+          "p50": 6,
+          "p95": 28.8,
+          "p99": 35.6,
+          "avg": 8.8,
+          "max": 79.5
+        },
+        "queueWait": {
+          "p50": 5.6,
+          "p95": 10.2,
+          "p99": 13.5,
+          "avg": 5.9,
+          "max": 31.9
+        },
+        "taskEndToEnd": {
+          "p50": 28.9,
+          "p95": 47.3,
+          "p99": 57.5,
+          "avg": 31,
+          "max": 95.5
+        },
+        "workflowCompletion": {
+          "p50": 101.3,
+          "p95": 129.4,
+          "p99": 151.3,
+          "avg": 103,
+          "max": 163.5
+        }
+      },
+      "workers": {
+        "utilization": 5.12,
+        "peakParallelTasks": 9,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 1059
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 941
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 10.9,
+          "peakCpuPct": 16,
+          "peakRssMb": 144.4
+        },
+        "workers": {
+          "avgCpuPct": 20.9,
+          "peakCpuPct": 28,
+          "peakRssMb": 287.4
+        },
+        "postgres": {
+          "avgCpuPct": 52,
+          "peakCpuPct": 57.1,
+          "peakRssMb": 2002
+        },
+        "redis": {
+          "avgCpuPct": 2.2,
+          "peakCpuPct": 3,
+          "peakRssMb": 8.8
+        }
+      },
+      "testDurationMs": 21410,
+      "ranAt": "2026-11-12T18:36:59.740Z"
+    },
+    {
+      "id": "failure-recovery",
+      "group": "failure",
+      "label": "10% failures + kill -9",
+      "config": {
+        "workers": 4,
+        "concurrencyPerWorker": 16,
+        "totalSlots": 64,
+        "taskType": "core.notify",
+        "taskDurationMs": 20,
+        "dag": "fan-out/fan-in, width 8 (10 tasks per workflow)",
+        "executions": 1000,
+        "tasks": 10000,
+        "strategy": "PRIORITY",
+        "queueFactor": 2,
+        "injectedFailureRate": 0.1,
+        "openLoopSeconds": null
+      },
+      "submission": {
+        "ms": 1723
+      },
+      "outcome": {
+        "workflowsSucceeded": 1000,
+        "workflowsFailed": 0,
+        "tasksSucceeded": 10000,
+        "tasksFailed": 0,
+        "attempts": 11098
+      },
+      "throughput": {
+        "tasksPerSec": 279.9,
+        "workflowsPerSec": 28,
+        "windowMs": 35730,
+        "makespanMs": 35730
+      },
+      "latencyMs": {
+        "taskExecution": {
+          "p50": 74,
+          "p95": 164,
+          "p99": 247,
+          "avg": 84.9,
+          "max": 425
+        },
+        "schedulingDelay": {
+          "p50": 14642.9,
+          "p95": 25935,
+          "p99": 26974,
+          "avg": 14409.7,
+          "max": 27097.2
+        },
+        "queueWait": {
+          "p50": 330.6,
+          "p95": 533.8,
+          "p99": 616,
+          "avg": 341.6,
+          "max": 3905.4
+        },
+        "taskEndToEnd": {
+          "p50": 13670.2,
+          "p95": 26155.6,
+          "p99": 27307.5,
+          "avg": 13414.2,
+          "max": 27454.7
+        },
+        "workflowCompletion": {
+          "p50": 34357.4,
+          "p95": 35505.9,
+          "p99": 35587.2,
+          "avg": 34323.6,
+          "max": 35729.6
+        }
+      },
+      "workers": {
+        "utilization": 40.730000000000004,
+        "peakParallelTasks": 61,
+        "perWorkerTasks": [
+          {
+            "worker_id": "bench-w0",
+            "n": 1074
+          },
+          {
+            "worker_id": "bench-w1",
+            "n": 3030
+          },
+          {
+            "worker_id": "bench-w2",
+            "n": 2957
+          },
+          {
+            "worker_id": "bench-w3",
+            "n": 2939
+          }
+        ]
+      },
+      "correctness": {
+        "tasksSucceededMoreThanOnce": 0,
+        "workflowsFinalizedOtherThanOnce": 0
+      },
+      "failures": {
+        "failedAttempts": 1087,
+        "lostAttempts": 11,
+        "tasksRetried": 988,
+        "retrySuccessRate": 100,
+        "deadLettered": 0
+      },
+      "businessEffects": {
+        "notificationRows": 10000,
+        "distinctLogicalOperations": 10000,
+        "duplicateRows": 0,
+        "duplicateBusinessEffectRate": 0,
+        "handlerAttempts": 11098
+      },
+      "recovery": {
+        "killedAt": "2026-11-12T18:37:40.810Z",
+        "orphanedAttempts": 11,
+        "detectionAndReapMs": 3423,
+        "allOrphanedTasksCompletedMs": 3844
+      },
+      "resources": {
+        "scheduler": {
+          "avgCpuPct": 8.1,
+          "peakCpuPct": 12,
+          "peakRssMb": 156.2
+        },
+        "workers": {
+          "avgCpuPct": 42,
+          "peakCpuPct": 69.7,
+          "peakRssMb": 593.7
+        },
+        "postgres": {
+          "avgCpuPct": 134.1,
+          "peakCpuPct": 161.6,
+          "peakRssMb": 3632.3
+        },
+        "redis": {
+          "avgCpuPct": 4.5,
+          "peakCpuPct": 6,
+          "peakRssMb": 10.5
+        }
+      },
+      "testDurationMs": 39458,
+      "ranAt": "2026-11-12T18:37:21.202Z"
+    }
+  ]
+}
